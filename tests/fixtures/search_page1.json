@@ -1,0 +1,20 @@
+{"search-results": {
+  "opensearch:totalResults": "2",
+  "opensearch:startIndex": "0",
+  "entry": [
+    {"dc:identifier": "SCOPUS_ID:85000000001", "eid": "2-s2.0-85000000001",
+     "dc:title": "Accessibility of news websites for neurodivergent readers",
+     "dc:creator": "Silva A.B.", "prism:publicationName": "Example Journal of Interactive Systems",
+     "prism:issn": "12345679", "source-id": "21100000001", "prism:volume": "12",
+     "prism:issueIdentifier": "1", "prism:pageRange": "45-60", "prism:coverDate": "2021-06-01",
+     "prism:doi": "10.5555/demo.001", "citedby-count": "7", "prism:aggregationType": "Journal",
+     "subtypeDescription": "Article", "openaccessFlag": true,
+     "affiliation": [{"affilname": "Example University", "affiliation-country": "Brazil"}],
+     "link": [{"@ref": "scopus", "@href": "https://www.scopus.com/inward/record.uri?eid=2-s2.0-85000000001"}]},
+    {"dc:identifier": "SCOPUS_ID:85000000002", "eid": "2-s2.0-85000000002",
+     "dc:title": "A second example paper", "dc:creator": "Doe J.",
+     "prism:publicationName": "Unindexed Proceedings", "prism:issn": "11111111",
+     "prism:coverDate": "2024-03-10", "prism:doi": "10.1000/no-abstract", "citedby-count": "0",
+     "subtypeDescription": "Conference Paper", "openaccessFlag": false,
+     "affiliation": {"affilname": "Other University", "affiliation-country": "Peru"}}
+  ]}}

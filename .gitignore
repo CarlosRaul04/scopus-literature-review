@@ -1,0 +1,13 @@
+# Nunca subir claves
+.env
+*.env
+secrets*
+# Resultados y caché de búsquedas
+*_enriched*.json
+*_filtered*.json
+scopus_results*.json
+search_log.csv
+.cache/
+__pycache__/
+*.pyc
+dist/
