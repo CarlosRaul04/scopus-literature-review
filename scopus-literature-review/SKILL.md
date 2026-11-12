@@ -5,7 +5,7 @@ description: Busca artículos en Scopus con la API de Elsevier, saca el cuartil 
 
 # Revisión de literatura con Scopus
 
-Esta skill convierte un pedido como «búscame artículos sobre X en revistas Q3 o Q4 desde 2020, con resumen y cita APA» en una tabla verificable. Todo se hace con `scripts/scopus.py`, que solo usa la librería estándar de Python 3.8+.
+Esta skill convierte un pedido como «búscame artículos sobre X en revistas Q3 o Q4 desde 2020, con resumen y cita APA» en una tabla verificable. Todo se hace con `scripts/scopus.py`, que solo usa la librería estándar de Python 3.10+.
 
 ## Reglas que no se rompen
 

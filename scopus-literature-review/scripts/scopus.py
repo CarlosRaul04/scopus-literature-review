@@ -3,7 +3,7 @@
 scopus.py — Búsqueda en Scopus, métricas de revistas (CiteScore, cuartil, SJR, SNIP),
 resúmenes de respaldo (Crossref / Semantic Scholar) y citas APA 7 / BibTeX.
 
-Solo usa la librería estándar de Python 3.8+.
+Solo usa la librería estándar de Python 3.10+.
 
 Variables de entorno:
   SCOPUS_API_KEY      (obligatoria) clave de https://dev.elsevier.com
