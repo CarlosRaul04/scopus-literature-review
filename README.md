@@ -97,6 +97,10 @@ Pedido: *«Necesito antecedentes para mi artículo sobre accesibilidad cognitiva
 
 <p align="center"><img src="docs/img/demo-tabla.png" alt="Tabla de resultados con año, título, autores, revista, cuartil, CiteScore y SJR" width="900"></p>
 
+**4. Puedes seguir pidiendo cambios.** Al pedirle *«solo Q3 o Q4, con un pequeño resumen»*, separa los artículos cuyo **mejor** cuartil es Q3 de los que solo son Q3 o Q4 **en alguna de sus áreas**, y ofrece ampliar la búsqueda:
+
+<p align="center"><img src="docs/img/demo-cuartiles.png" alt="Artículos filtrados por cuartil Q3 o Q4, separando el mejor cuartil del cuartil por área, con un resumen de cada uno" width="750"></p>
+
 > 🔐 **Tu clave es privada.** La skill le indica al agente que la use solo durante la sesión y que nunca la escriba en archivos. No la subas a GitHub ni la compartas.
 
 ## 🛠 Comandos
