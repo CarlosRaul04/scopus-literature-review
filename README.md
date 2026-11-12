@@ -4,7 +4,7 @@
 
 **Skill para Claude que hace revisiones de literatura con Scopus: busca artículos, saca el cuartil de cada revista, completa resúmenes y cita en APA 7 o BibTeX, sin inventar datos.**
 
-![Python](https://img.shields.io/badge/python-3.8%2B-blue)
+![Python](https://img.shields.io/badge/python-3.10%2B-blue)
 ![Dependencias](https://img.shields.io/badge/dependencias-ninguna-brightgreen)
 ![Licencia](https://img.shields.io/badge/licencia-MIT-green)
 ![Idioma](https://img.shields.io/badge/idioma-espa%C3%B1ol-orange)
@@ -45,7 +45,7 @@ Ya existen otras skills y servidores MCP para Scopus. Esta está pensada para qu
 
 ## 📋 Requisitos
 
-- **Python 3.8 o superior.**
+- **Python 3.10 o superior.**
 - **Una clave de API de Elsevier.** Se crea gratis en [dev.elsevier.com](https://dev.elsevier.com) (botón *I want an API key*). Normalmente solo funciona si tu universidad o institución está suscrita a Scopus.
 - **Acceso a internet** a `api.elsevier.com`, `api.crossref.org`, `api.openalex.org` y `api.semanticscholar.org`.
 
@@ -242,7 +242,7 @@ Ask Claude in plain language, for example *"Find papers since 2020 on web access
 - **Claude Code:** copy the inner `scopus-literature-review/` folder to `~/.claude/skills/`.
 - **Other `SKILL.md`-compatible agents:** copy the same folder to your agent's skills directory.
 
-You need Python 3.8+ and an Elsevier API key from [dev.elsevier.com](https://dev.elsevier.com), which usually requires an institutional Scopus subscription.
+You need Python 3.10+ and an Elsevier API key from [dev.elsevier.com](https://dev.elsevier.com), which usually requires an institutional Scopus subscription.
 
 ### Language
 
