@@ -81,16 +81,21 @@ Después de instalarla, pídele a Claude lo que necesites. La primera vez te ped
 - *«Hazme la búsqueda para una revisión sistemática sobre IA generativa en evaluación universitaria, con los números para el diagrama PRISMA.»*
 - *«Dame el cuartil de Computers in Human Behavior.»*
 
-**Ejemplo de lo que entrega** (métricas de una revista):
+### Ejemplo real
 
-```
-Computers in Human Behavior — Elsevier Ltd
-  ISSN 0747-5632 · source-id 19419
-  CiteScore 22.6 (2025) · SJR 3.072 (2025) · SNIP 3.286
-  Q1  Arts and Humanities (miscellaneous)  (percentil 99)
-  Q1  Psychology (all)                     (percentil 97)
-  Q1  Human-Computer Interaction           (percentil 96)
-```
+Pedido: *«Necesito antecedentes para mi artículo sobre accesibilidad cognitiva en noticias digitales. Busca en Scopus artículos de 2021 en adelante, solo en revistas, con su cuartil, un resumen de dos líneas y las referencias en APA 7.»*
+
+**1. Claude explica cómo buscó y qué encontró** (6 consultas → 142 registros → 15 artículos):
+
+<p align="center"><img src="docs/img/demo-respuesta.png" alt="Resumen de la búsqueda hecha por Claude con la skill" width="800"></p>
+
+**2. Avisa lo que hay que revisar, en lugar de inventar datos:**
+
+<p align="center"><img src="docs/img/demo-revision.png" alt="Lista de huecos y advertencias: cuartiles por área, resumen tomado de la editorial, artículo excluido" width="800"></p>
+
+**3. Entrega la tabla con cuartil, CiteScore y SJR**, además de las referencias en APA 7 y el registro de la búsqueda:
+
+<p align="center"><img src="docs/img/demo-tabla.png" alt="Tabla de resultados con año, título, autores, revista, cuartil, CiteScore y SJR" width="900"></p>
 
 > 🔐 **Tu clave es privada.** La skill le indica al agente que la use solo durante la sesión y que nunca la escriba en archivos. No la subas a GitHub ni la compartas.
 
@@ -116,6 +121,17 @@ export SCOPUS_API_KEY="tu_clave"          # En PowerShell: $env:SCOPUS_API_KEY =
 | `abstract` | Resumen de un artículo | `python scripts/scopus.py abstract 10.1016/j.chb.2020.106000` |
 
 Usa `python scripts/scopus.py <comando> -h` para ver todas las opciones.
+
+Ejemplo de salida de `journal`:
+
+```
+Computers in Human Behavior — Elsevier Ltd
+  ISSN 0747-5632 · source-id 19419
+  CiteScore 22.6 (2025) · SJR 3.072 (2025) · SNIP 3.286
+  Q1  Arts and Humanities (miscellaneous)  (percentil 99)
+  Q1  Psychology (all)                     (percentil 97)
+  Q1  Human-Computer Interaction           (percentil 96)
+```
 
 **En Windows (PowerShell):** las comillas dobles dentro de la consulta se pierden. Guarda la consulta en un archivo y usa `--query-file`:
 
@@ -226,6 +242,8 @@ Los reportes de errores y las mejoras son bienvenidos. Abre un *issue* o un *pul
 ### What it does
 
 Ask Claude in plain language, for example *"Find papers since 2020 on web accessibility for people with dyslexia, only in Q1–Q2 journals, with a two-line summary and APA references"*. Claude builds the Scopus query, runs the search, computes quartiles, fills in metadata and abstracts, filters, and returns a table, a reference list and a search log.
+
+<p align="center"><img src="docs/img/demo-tabla.png" alt="Results table with year, title, authors, journal, quartile, CiteScore and SJR" width="900"></p>
 
 ### Why this one
 
