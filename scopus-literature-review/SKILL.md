@@ -10,13 +10,15 @@ Esta skill convierte un pedido como «búscame artículos sobre X en revistas Q3
 ## Reglas que no se rompen
 
 1. **Nunca inventes datos.** Si un resumen, cuartil, autor, página o DOI no aparece en las APIs, escribe «no aparece» (o «not found» si el usuario escribe en inglés). No completes desde la memoria.
-2. **La clave de API es del usuario.** Pídesela si no está en `SCOPUS_API_KEY`, expórtala solo para la sesión y nunca la escribas en archivos, artifacts, repositorios, páginas publicadas ni en la respuesta.
+2. **La clave de API es del usuario.** Si no está en `SCOPUS_API_KEY`, pídele que la pegue en el chat; expórtala tú solo para la sesión y nunca la escribas en archivos, artifacts, repositorios, páginas publicadas ni la repitas en la respuesta.
 3. **Los resultados van a archivos, no al chat.** Guarda JSON y CSV; en el chat muestra solo la tabla final o un resumen.
 4. **Cita con los datos de Crossref**, no con los de Scopus Search (que solo trae el primer autor) ni de memoria.
 5. **Di de dónde sale cada cuartil**: «cuartil por CiteScore (Scopus), año X». No lo presentes como cuartil SJR/SCImago ni JCR: pueden no coincidir.
 6. **Registra cada búsqueda** (el script lo hace en `search_log.csv`): la consulta exacta, la fecha y el total. Así la revisión es reproducible.
 
 ## 1. Preparación (una vez por sesión)
+
+**Cómo conseguir la clave:** si `SCOPUS_API_KEY` no existe, pídele al usuario que **pegue la clave en el chat**. En las apps de Claude es la forma normal: el usuario no puede crear variables de entorno, así que no le pidas que configure nada. Cuando la pegue, expórtala tú en la terminal y sigue. Puedes mencionar en una línea que la clave queda en el historial de esa conversación y que, si la comparte, conviene regenerarla. No le digas que no la pegue. Solo si el usuario trabaja en su propia terminal (Claude Code, scripts) sugiere la variable de entorno.
 
 ```bash
 export SCOPUS_API_KEY="<clave que dé el usuario>"

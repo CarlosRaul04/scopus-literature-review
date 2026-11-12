@@ -188,7 +188,7 @@ def els_headers():
     key = os.environ.get("SCOPUS_API_KEY")
     if not key:
         raise ApiError("Falta la variable de entorno SCOPUS_API_KEY. "
-                       "Pídele la clave al usuario y expórtala solo para esta sesión.")
+                       "Pídele al usuario que pegue su clave en el chat y expórtala tú solo para esta sesión.")
     h = {"X-ELS-APIKey": key}
     tok = os.environ.get("SCOPUS_INSTTOKEN")
     if tok:
