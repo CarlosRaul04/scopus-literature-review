@@ -1,0 +1,10 @@
+{"status": "ok", "message": {
+  "DOI": "10.5555/chapter.001", "type": "book-chapter",
+  "title": ["Designing easy-to-read interfaces"],
+  "container-title": ["Lecture Notes in Example Science", "Proceedings of the Example Conference on Accessibility"],
+  "author": [{"given": "Lucía", "family": "Pérez"}, {"given": "Tomás", "family": "Gil"}],
+  "published-print": {"date-parts": [[2027]]},
+  "published-online": {"date-parts": [[2026, 7, 16]]},
+  "issued": {"date-parts": [[2026, 7, 16]]},
+  "page": "377-384", "publisher": "Example Nature Switzerland"
+}}

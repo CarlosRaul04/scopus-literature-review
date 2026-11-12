@@ -1,0 +1,6 @@
+{"status": "ok", "message": {
+  "DOI": "10.1000/no-abstract", "type": "proceedings-article",
+  "title": ["A second example paper"], "container-title": ["Unindexed Proceedings"],
+  "author": [{"given": "John", "family": "Doe"}],
+  "issued": {"date-parts": [[2024]]}, "page": "1-8", "publisher": "Example Press"
+}}

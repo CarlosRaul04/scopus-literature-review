@@ -1,0 +1,22 @@
+{"serial-metadata-response": {"entry": [{
+  "dc:title": "Example Journal of Interactive Systems", "dc:publisher": "Example Society",
+  "source-id": "21100000001", "prism:issn": "12345679", "openaccess": "1",
+  "subject-area": [
+    {"@code": "1709", "@abbrev": "COMP", "$": "Human-Computer Interaction"},
+    {"@code": "1706", "@abbrev": "COMP", "$": "Computer Science Applications"}],
+  "SJRList": {"SJR": [{"@year": "2024", "$": "0.25"}]},
+  "SNIPList": {"SNIP": {"@year": "2024", "$": "0.40"}},
+  "citeScoreYearInfoList": {
+    "citeScoreCurrentMetric": "1.6", "citeScoreCurrentMetricYear": "2024",
+    "citeScoreTracker": "2.9", "citeScoreTrackerYear": "2025",
+    "citeScoreYearInfo": [
+      {"@year": "2025", "@status": "In-Progress", "citeScoreInformationList": [{"citeScoreInfo": [
+        {"docType": "all", "citeScore": "2.9", "citeScoreSubjectRank": [
+          {"subjectCode": "1709", "rank": "10", "percentile": "90"}]}]}]},
+      {"@year": "2024", "@status": "Complete", "citeScoreInformationList": [{"citeScoreInfo": [
+        {"docType": "all", "citeScore": "1.6", "citeScoreSubjectRank": [
+          {"subjectCode": "1709", "rank": "100", "percentile": "38"},
+          {"subjectCode": "1706", "rank": "700", "percentile": "20"}]}]}]}
+    ]},
+  "link": [{"@ref": "scopus-source", "@href": "https://www.scopus.com/sourceid/21100000001"}]
+}]}}
