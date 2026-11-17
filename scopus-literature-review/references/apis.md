@@ -9,6 +9,7 @@ Encabezados de Elsevier: `X-ELS-APIKey: <clave>`, `Accept: application/json` y, 
 - `sort`: `-coverDate`, `+coverDate`, `-citedby-count`, `relevancy`, `-pubyear`.
 - `view=COMPLETE` (requiere derecho institucional): agrega todos los autores (`author`), resumen (`dc:description`) y palabras clave (`authkeywords`).
 - Campos que usa el script: `dc:title`, `dc:creator`, `prism:publicationName`, `prism:issn`, `prism:eIssn`, `source-id`, `prism:volume`, `prism:issueIdentifier`, `prism:pageRange`, `article-number`, `prism:coverDate`, `prism:doi`, `eid`, `dc:identifier`, `citedby-count`, `subtypeDescription`, `prism:aggregationType`, `openaccessFlag`, `affiliation[]`.
+- La paginación por `start` no es estable: entre páginas puede repetir y saltarse registros. El script deduplica por EID y completa con pasadas en otros órdenes (`-coverDate`, `+coverDate`, `-citedby-count`…). La paginación por `cursor` no está disponible con todas las claves.
 - Resultado vacío: `entry: [{"error": "Result set was empty"}]`.
 - Cuota en los encabezados: `X-RateLimit-Limit`, `X-RateLimit-Remaining`, `X-RateLimit-Reset` (epoch).
 

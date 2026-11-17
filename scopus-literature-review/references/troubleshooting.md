@@ -13,6 +13,7 @@
 | Total enorme | Consulta demasiado amplia | Pasar de `ALL()` a `TITLE-ABS-KEY()`, agregar un concepto, limitar años o área |
 | Muchos «no aparece» en resumen | Elsevier, Springer y otras editoriales no permiten compartir los resúmenes en fuentes abiertas (Semantic Scholar lo indica como *elided by the publisher*); `abstract_note` lo explica | Con token institucional o desde la red de la institución, Scopus sí los entrega. Si no, el agente puede leer el resumen en la página del DOI |
 | `unrecognized arguments` al buscar en PowerShell | PowerShell quita las comillas dobles de dentro de la consulta y la parte en varios argumentos | Guardar la consulta en un `.txt` y usar `--query-file consulta.txt`, o escapar: `'TITLE-ABS-KEY(\"frase\")'` |
+| Registros repetidos o faltantes al descargar muchos resultados | Scopus no mantiene un orden estable entre páginas (sobre todo por relevancia) | El script deduplica y, si se pidió todo, hace pasadas extra con otros órdenes. Si aun así falta algo, avisa con «se recuperaron X de Y» |
 | Resultados con fecha del año siguiente | Artículos «en prensa» ya asignados a un número futuro | Es normal. Para citar, el script usa el año del número (artículos) o la fecha de publicación (capítulos) |
 | Trabajos ajenos al tema entre los resultados | Scopus también busca en palabras clave indexadas | Ajustar la consulta (`TITLE()`, otro concepto, `AND NOT`) |
 | Semantic Scholar muy lento | Límite estricto sin clave | Pedir una clave gratuita en semanticscholar.org/product/api y exportarla como `S2_API_KEY` |
