@@ -334,6 +334,27 @@ class TestUnstablePagination(Base):
         self.assertEqual(d["meta"]["passes"], ["relevancy"])  # no mezcla otro orden si no se pidió todo
 
 
+class TestDiscontinuedJournal(Base):
+    def test_warns_when_no_tracker(self):
+        data = fixture("serial_title.json")
+        info = data["serial-metadata-response"]["entry"][0]["citeScoreYearInfoList"]
+        info.pop("citeScoreTracker")
+        info.pop("citeScoreTrackerYear")
+
+        def fake(url, headers=None, tries=4, base_wait=2.0):
+            if "serial/title/issn/1234-5679" in url:
+                return data
+            return fake_http_get(url, headers, tries, base_wait)
+        scopus.http_get = fake
+        code, out, _ = self.run_cli("journal", "1234-5679")
+        self.assertIn("descontinuada", out)
+        self.assertIn("Q3", out)  # el cuartil se sigue mostrando, con la advertencia
+
+    def test_no_warning_for_active_journal(self):
+        code, out, _ = self.run_cli("journal", "1234-5679")
+        self.assertNotIn("descontinuada", out)
+
+
 class TestHttp(unittest.TestCase):
     """http_get contra un servidor local: reintento ante 429 y mensaje claro ante 400."""
 

@@ -113,6 +113,7 @@ Para revisiones con muchos registros, el enriquecimiento tarda (Semantic Scholar
 - El script usa el **año oficial de CiteScore** (`citeScoreCurrentMetricYear`), no el *CiteScore Tracker* del año en curso, que cambia cada mes.
 - **Series de libros y actas** (Lecture Notes in Computer Science, CCIS, etc.) también tienen CiteScore y cuartil en Scopus, pero es el cuartil de la **serie**, no de una revista. El script lo marca en `quartile_note`. Si el usuario pide «revistas Q1–Q2», usa `--journals-only` o avísale.
 - Una revista puede ser Q2 en un área y Q4 en otra. `quartile_best` es el mejor; `quartiles_by_area` los muestra todos. Si el usuario necesita el cuartil en un área concreta, usa esa.
+- Si el script avisa que la revista **puede estar descontinuada** (`status_note` / `journal_note`: Scopus ya no le calcula el CiteScore del año en curso), dilo de forma destacada junto al cuartil. Es decisivo si el usuario quiere publicar ahí: lo que publique ya no entraría en Scopus.
 - SJR (SCImago) y JCR (Clarivate) tienen sus propios cuartiles. Si el usuario o su institución exige uno de ellos, dilo y sugiere confirmarlo en https://www.scimagojr.com o en JCR.
 - Detalle y advertencias: `references/metrics.md`.
 

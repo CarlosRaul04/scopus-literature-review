@@ -411,8 +411,14 @@ def journal_metrics(issn, refresh=False):
         "snip": float(snip[0]["$"]) if snip and snip[0].get("$") else None,
         "ranks": sorted(ranks, key=lambda r: -r["percentile"]),
         "best_quartile": min((r["quartile"] for r in ranks), default=None),
+        "status_note": None,
         "scopus_url": next((l.get("@href") for l in as_list(e.get("link")) if l.get("@ref") == "scopus-source"), None),
     }
+    # Sin CiteScore Tracker y con un CiteScore de hace años: señal de revista descontinuada o en pausa en Scopus
+    if res["citescore"] is not None and res["citescore_tracker"] is None:
+        res["status_note"] = (f"Scopus no calcula el CiteScore del año en curso para esta revista (el último es de "
+                              f"{res['citescore_year']}): puede estar descontinuada o en pausa en Scopus. "
+                              "Verifícalo en la lista de títulos descontinuados de Scopus o en su página de fuente.")
     cache_put("journal", issn, res)
     return res
 
@@ -440,6 +446,8 @@ def cmd_journal(args):
         for r in m["ranks"]:
             print(f"  {r['quartile']}  {r['area']}  (percentil {r['percentile']:.0f}, puesto {r['rank']})")
         print(f"  Mejor cuartil (CiteScore): {m['best_quartile'] or NOT_FOUND}")
+        if m.get("status_note"):
+            print(f"  ⚠ {m['status_note']}")
     if args.json:
         print(json.dumps(rows, ensure_ascii=False, indent=1))
 
@@ -631,6 +639,8 @@ def cmd_enrich(args):
             r["citescore_year"] = m["citescore_year"]
             r["sjr"] = m["sjr"]
             r["quartile_best"] = m["best_quartile"]
+            if m.get("status_note"):
+                r["journal_note"] = m["status_note"]
             r["quartiles_by_area"] = "; ".join(f"{x['area']}: {x['quartile']}" for x in m["ranks"]) or None
             st = (r.get("source_type") or "").lower()
             if st and st != "journal" and m["best_quartile"]:
@@ -722,7 +732,7 @@ def cmd_export(args):
     recs = load_json(args.file)
     cols = ["year", "title", "authors", "journal", "quartile_best", "citescore", "sjr", "cited_by",
             "doctype", "source_type", "doi", "abstract", "abstract_source", "abstract_note",
-            "quartiles_by_area", "quartile_note", "oa_pdf"]
+            "quartiles_by_area", "quartile_note", "journal_note", "oa_pdf"]
     def val(r, c):
         if c == "authors":
             return fmt_authors_short(r)
