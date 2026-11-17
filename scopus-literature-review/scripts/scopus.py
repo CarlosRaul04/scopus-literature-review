@@ -188,7 +188,7 @@ def els_headers():
     key = os.environ.get("SCOPUS_API_KEY")
     if not key:
         raise ApiError("Falta la variable de entorno SCOPUS_API_KEY. "
-                       "Pídele al usuario que pegue su clave en el chat y expórtala tú solo para esta sesión.")
+                       "Detente y pídele al usuario que pegue su clave en el chat (expórtala tú solo para esta sesión). No busques por otros medios sin preguntarle antes.")
     h = {"X-ELS-APIKey": key}
     tok = os.environ.get("SCOPUS_INSTTOKEN")
     if tok:
@@ -280,24 +280,61 @@ def cmd_search(args):
     limit = min(args.max, 5000)
     if args.max > 5000:
         eprint("Aviso: Scopus Search entrega como máximo 5000 resultados por consulta; acota la búsqueda.")
-    out, total, start = [], None, 0
-    while start < limit:
-        params = {"query": args.query, "count": min(25, limit - start), "start": start,
-                  "sort": args.sort, "view": view}
-        d = http_get(f"{ELSEVIER}/search/scopus?" + urllib.parse.urlencode(params), h)
-        sr = (d or {}).get("search-results", {})
-        if total is None:
-            total = int(sr.get("opensearch:totalResults") or 0)
-            eprint(f"Resultados totales en Scopus: {total}")
-            limit = min(limit, total)
-        entries = [e for e in as_list(sr.get("entry")) if "error" not in e]
-        if not entries:
-            break
-        out.extend(parse_entry(e) for e in entries)
-        start += len(entries)
-        time.sleep(0.15)
+    seen, out = set(), []
+
+    def rec_key(r):
+        return r.get("eid") or (r.get("doi") or "").lower() or norm_title(r.get("title")) + str(r.get("year"))
+
+    def fetch_pass(sort, want):
+        """Pagina con un orden dado hasta juntar `want` registros únicos nuevos o agotar los 5000.
+        Scopus no garantiza un orden estable entre páginas (sobre todo por relevancia):
+        puede repetir y saltarse registros, así que se deduplica en el camino."""
+        nonlocal total
+        start, added = 0, 0
+        cap = 5000
+        while start < cap and len(out) < want:
+            params = {"query": args.query, "count": 25, "start": start, "sort": sort, "view": view}
+            d = http_get(f"{ELSEVIER}/search/scopus?" + urllib.parse.urlencode(params), h)
+            sr = (d or {}).get("search-results", {})
+            if total is None:
+                total = int(sr.get("opensearch:totalResults") or 0)
+                eprint(f"Resultados totales en Scopus: {total}")
+            cap = min(5000, total or 0)
+            entries = [e for e in as_list(sr.get("entry")) if "error" not in e]
+            if not entries:
+                break
+            for e in entries:
+                r = parse_entry(e)
+                k = rec_key(r)
+                if k in seen:
+                    continue
+                seen.add(k)
+                out.append(r)
+                added += 1
+                if len(out) >= want:
+                    break
+            start += len(entries)
+            time.sleep(0.15)
+        return added
+
+    total = None
+    fetch_pass(args.sort, limit)
+    target = min(limit, total or 0)
+    passes = [args.sort]
+    # Si se pidió todo y faltan registros, otras pasadas con órdenes distintos completan el conjunto
+    if target and len(out) < target and target >= min(total or 0, 5000):
+        for alt in ("-coverDate", "+coverDate", "-citedby-count", "+citedby-count", "relevancy"):
+            if len(out) >= target or alt in passes:
+                continue
+            eprint(f"  Scopus repitió o saltó registros: pasada extra ordenando por {alt} "
+                   f"({len(out)}/{target} únicos)…")
+            fetch_pass(alt, target)
+            passes.append(alt)
+    if target and len(out) < target:
+        eprint(f"Aviso: se recuperaron {len(out)} de {target} registros únicos esperados.")
     meta = {"query": args.query, "sort": args.sort, "view": view, "total_in_scopus": total,
-            "retrieved": len(out), "date": dt.datetime.now().isoformat(timespec="seconds")}
+            "retrieved": len(out), "passes": passes,
+            "date": dt.datetime.now().isoformat(timespec="seconds")}
     save_json(args.out, out, meta)
     log_search(args.out, meta)
     eprint(f"Guardados {len(out)} registros en {args.out}")

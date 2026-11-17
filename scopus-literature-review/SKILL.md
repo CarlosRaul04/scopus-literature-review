@@ -1,11 +1,21 @@
 ---
 name: scopus-literature-review
-description: Busca artículos en Scopus con la API de Elsevier, saca el cuartil de cada revista por área (CiteScore), completa resúmenes y autores con Crossref, OpenAlex y Semantic Scholar y cita en APA 7 o BibTeX sin inventar datos. Úsala para revisiones de literatura, estado del arte, antecedentes, elegir revista por cuartil (Q1–Q4) o cuando el usuario mencione Scopus, Elsevier, CiteScore, SJR o cuartiles. Also for Scopus literature search, journal quartiles and citations in any language.
+description: Busca y selecciona artículos científicos en Scopus, da el cuartil de una revista (Q1–Q4 por área, CiteScore) y entrega tablas, resúmenes y referencias APA 7 o BibTeX verificadas, sin inventar datos. Úsala SIEMPRE que el usuario pida artículos científicos, papers, fuentes o referencias académicas para una tesis, marco teórico, antecedentes, estado del arte o revisión sistemática (PRISMA); pregunte el cuartil, CiteScore o indexación de una revista; quiera elegir revista para publicar; o pida la producción científica de un autor o institución. También cuando mencione Scopus, Elsevier, SJR o cuartiles. Use it for any request for scholarly papers, journal quartiles or verified academic references, in any language.
 ---
 
 # Revisión de literatura con Scopus
 
 Esta skill convierte un pedido como «búscame artículos sobre X en revistas Q3 o Q4 desde 2020, con resumen y cita APA» en una tabla verificable. Todo se hace con `scripts/scopus.py`, que solo usa la librería estándar de Python 3.10+.
+
+## Paso 0: la clave, antes que nada
+
+Antes de buscar cualquier cosa —en Scopus, en la web, en Crossref, OpenAlex o Semantic Scholar— comprueba si existe `SCOPUS_API_KEY` (o si el usuario ya pegó su clave en la conversación). **Si no hay clave, tu primera respuesta es pedirla y detenerte ahí.** No empieces con otras fuentes «mientras tanto»: el usuario termina esperando muchos minutos un resultado sin cuartiles verificados y no querrá repetir todo después.
+
+Pídela con un mensaje corto, por ejemplo:
+
+> Para buscar en Scopus y darte el cuartil verificado de cada revista necesito tu clave de API de Elsevier. Pégala aquí y la uso solo en esta sesión. Si no tienes una, se crea gratis en https://dev.elsevier.com (normalmente requiere que tu institución esté suscrita a Scopus). Si prefieres seguir sin clave, puedo buscar en fuentes abiertas, pero sin cuartiles de Scopus.
+
+Solo si el usuario dice que no tiene clave o elige seguir sin ella, usa fuentes abiertas y deja claro en la respuesta que los cuartiles no están verificados en Scopus.
 
 ## Reglas que no se rompen
 
@@ -92,6 +102,8 @@ python3 scripts/scopus.py cite 10.xxxx/yyyy --style bibtex
 python3 scripts/scopus.py merge a.json b.json --out todos.json   # unir búsquedas sin duplicados
 python3 scripts/scopus.py summary todos_enriched.json --by journal   # revistas, años o cuartiles
 ```
+
+Al descargar muchos registros, Scopus puede repetir y saltarse algunos entre páginas (sobre todo al ordenar por relevancia). El script lo detecta, elimina los repetidos y, si se pidió el conjunto completo, hace pasadas extra con otros órdenes hasta llegar al total (`meta.passes`). No hace falta repetir la consulta a mano.
 
 Para revisiones con muchos registros, el enriquecimiento tarda (Semantic Scholar sin clave permite ~1 llamada cada 3–4 s). Avísale al usuario y trabaja en segundo plano si el entorno lo permite. La caché evita repetir llamadas.
 
