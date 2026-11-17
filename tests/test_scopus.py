@@ -287,6 +287,53 @@ class TestFromRealRun(Base):
         self.assertEqual(rj(out)["meta"]["sort"], "relevancy")
 
 
+class TestUnstablePagination(Base):
+    """Scopus puede repetir y saltarse registros entre páginas (visto en una búsqueda real de 2666 registros)."""
+
+    def _fake(self):
+        import urllib.parse as up
+
+        def entry(i):
+            return {"eid": f"2-s2.0-{i}", "dc:title": f"Paper {i}", "prism:coverDate": "2024-01-01",
+                    "prism:doi": f"10.9/{i}", "citedby-count": "0", "subtypeDescription": "Article"}
+
+        def fake(url, headers=None, tries=4, base_wait=2.0):
+            if "search/scopus" not in url:
+                return fake_http_get(url, headers, tries, base_wait)
+            q = dict(up.parse_qsl(up.urlparse(url).query))
+            start, sort = int(q["start"]), q["sort"]
+            if sort == "relevancy":   # orden inestable: repite 1-5 y nunca entrega 26-30
+                ids = list(range(1, 21)) + list(range(1, 6)) if start == 0 else list(range(21, 26))
+            else:                     # orden estable
+                allids = list(range(30, 0, -1))
+                ids = allids[start:start + 25]
+            return {"search-results": {"opensearch:totalResults": "30", "entry": [entry(i) for i in ids]}}
+        return fake
+
+    def test_recovers_full_set_with_extra_passes(self):
+        scopus.http_get = self._fake()
+        out = os.path.join(self.tmp, "r.json")
+        code, _, err = self.run_cli("search", "TITLE(x)", "--max", "5000", "--out", out, "--show", "0")
+        self.assertEqual(code, 0, err)
+        d = rj(out)
+        eids = [r["eid"] for r in d["records"]]
+        self.assertEqual(len(eids), 30)
+        self.assertEqual(len(set(eids)), 30)
+        self.assertEqual(d["meta"]["passes"][0], "relevancy")
+        self.assertGreater(len(d["meta"]["passes"]), 1)
+        self.assertIn("pasada extra", err)
+
+    def test_partial_request_keeps_order_and_no_duplicates(self):
+        scopus.http_get = self._fake()
+        out = os.path.join(self.tmp, "r.json")
+        self.run_cli("search", "TITLE(x)", "--max", "22", "--out", out, "--show", "0")
+        d = rj(out)
+        eids = [r["eid"] for r in d["records"]]
+        self.assertEqual(len(eids), 22)
+        self.assertEqual(len(set(eids)), 22)
+        self.assertEqual(d["meta"]["passes"], ["relevancy"])  # no mezcla otro orden si no se pidió todo
+
+
 class TestHttp(unittest.TestCase):
     """http_get contra un servidor local: reintento ante 429 y mensaje claro ante 400."""
 
